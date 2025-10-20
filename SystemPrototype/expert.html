@@ -1,0 +1,369 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeteoChat</title> 
+</head>
+<body role="application">
+    <!-- ==============================
+         HEADER SECTION
+         ============================== -->
+    <div class="header-title" role="banner" aria-label="MeteoChat header">
+        <!-- Main application title -->
+        <h1 id="chat-title" role="heading" aria-level="1">MeteoChat</h1>
+        <!-- MeteoChat logo image with accessible attributes -->
+        <img src="static/LogoMeteoChat_nero.png" 
+            alt="MeteoChat logo" 
+            class="logo"
+            role="img"
+            aria-label="Logo di MeteoChat">
+    </div>
+     <!-- ==============================
+         CHAT INTERFACE
+         ============================== -->
+    <div class="chatbox" role="region" aria-labelledby="chat-title" aria-live="polite">
+        <!-- Chat message container (log of conversation) -->
+        <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions text" aria-atomic="false"></div>
+        <!-- Loading animation displayed while chatbot responds -->
+        <div id="loading" class="loading" style="display: none;" role="status" aria-live="assertive" aria-label="Chatbot is typing">
+            <p class="chatbot-message">
+                <span class="dots" aria-hidden="true"></span>
+            </p>
+        </div>
+        <!-- User input section -->
+        <div class="input-box" role="form" aria-label="Chat input area">
+            <!-- Text field for user messages -->
+            <input type="text" 
+                   id="user-input" 
+                   placeholder="Write a message..." 
+                   aria-label="Type your message" 
+                   role="textbox" 
+                   aria-required="true">
+            <!-- Send message button -->
+            <button onclick="sendMessage()" 
+                    id="sendbtn" 
+                    title="Send the message" 
+                    role="button" 
+                    aria-label="Send message to chatbot">
+                Send
+            </button>
+            <!-- Download conversation report button -->
+            <button title="Download Report" 
+                    id="downloadbtn" 
+                    onclick="downloadReport()" 
+                    role="button" 
+                    aria-label="Download conversation report">
+                Download Report
+            </button>
+        </div>
+    </div>
+        <!-- ==============================
+         JAVASCRIPT FUNCTIONALITY
+         ============================== -->
+    <script>
+        // Allow the Enter key to trigger message sending
+        document.getElementById("user-input").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                sendMessage();
+            }
+        });
+        // Function to add a message to the chat window
+        function appendMessage(sender, message) {
+            // Find the HTML element where messages are displayed
+            let messagesDiv = document.getElementById("messages");
+
+            // Create a new <p> element for the message
+            let newMessage = document.createElement("p");
+
+             if (sender === "Chatbot") {
+                // Interpret message content as HTML (useful for tables or formatted responses)
+                newMessage.innerHTML = message;
+                newMessage.classList.add("chatbot-message");
+                newMessage.setAttribute("role", "article");
+                newMessage.setAttribute("aria-label", "Message from chatbot");
+            } else {
+                // User messages remain as plain text
+                newMessage.innerText = sender + ": " + message;
+                newMessage.classList.add("user-message");
+                newMessage.setAttribute("role", "article");
+                newMessage.setAttribute("aria-label", "Message from user");
+            }
+            // Add the new message to the list of messages in the chat
+            messagesDiv.appendChild(newMessage);
+        }
+        // Function to send user's message to the expert chatbot
+        function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+
+            // Ignore empty input
+            if (userInput.trim() === "") return;
+
+            // Display the user's message in the chat
+            appendMessage("User", userInput);
+            document.getElementById("user-input").value = "";
+
+            // Show the loading indicator
+            let loadingIndicator = document.getElementById("loading");
+            loadingIndicator.style.display = "block";
+
+            // Send message to backend endpoint for expert chatbot
+            fetch('/chat_expert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            })
+
+                .then(response => response.json())
+                .then(data => {
+                    // Hide the loading indicator
+                    loadingIndicator.style.display = "none";
+                    
+                    // Handle and display chatbot’s response or error
+                    if (data.response) {
+                        let chatbotMessage = data.response.result || data.response || 'No response';
+                        appendMessage("Chatbot", chatbotMessage);
+                    } else if (data.error) {
+                        appendMessage("Chatbot", "Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    // Hide loading and show error message
+                    loadingIndicator.style.display = "none";
+
+                    appendMessage("Chatbot", "An error occurred.");
+                    console.error('Error:', error);
+                });
+        }
+        // Function to download the chat as a report
+        function downloadReport() {
+            let messagesDiv = document.getElementById("messages");
+            let loadingIndicator = document.getElementById("loading");
+            // Check if the chatbot is answering
+            if (loadingIndicator.style.display !== "none") {
+                alert("Please wait for the chatbot to finish answering before downloading the report.");
+                return;
+            }
+            
+            // Check if there are messages in the chat
+            if (messagesDiv.children.length === 0) {
+                alert("No conversation available to download.");
+                return;
+            }
+            // Redirect to the backend route for report generation
+            window.location.href = '/download_expert';
+
+        }
+    </script>
+      <!-- ==============================
+         STYLESHEET
+         ============================== -->
+    <style>
+        *{
+            font-family: "Century Gothic";
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f9f4;
+        }
+
+        /* Header */
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 3%;
+        }
+
+        .logo {
+            width: 70px;
+            height: auto;
+        }
+
+        h1{
+            text-align: center;
+            font-size: 50px;
+            margin: 0;
+        }
+
+        /* Chatbox */
+        .chatbox {
+            width: 70%;
+            max-width: 1200px;
+            height: auto;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .messages {
+            height: 800px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-box input {
+            flex: 1 1 auto;
+            padding: 15px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-box button {
+            padding: 15px;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 0 0 auto;
+            margin-bottom: 5px;
+        }
+
+        #sendbtn {
+            background: #0c8867;
+        }
+
+        #downloadbtn {
+            background-color: grey;
+        }
+
+        /* User & Chatbot messages */
+        .user-message {
+            text-align: right;
+            color: white;
+            background-color: #0D3F32;
+            margin: 10px 1% 10px auto;
+            padding: 10px;
+            border-radius: 10px;
+            width: 50%;
+            word-wrap: break-word;
+            display: block;
+        }
+
+        .chatbot-message {
+            text-align: left;
+            background-color: #E8E8E8;
+            margin: 10px auto 10px 1%;
+            padding: 10px;
+            border-radius: 10px;
+            width: 50%;
+            word-wrap: break-word;
+            display: block;
+        }
+        /* Loading Animation */
+        .dots::after {
+            content: ".";
+            animation: dots 1.5s steps(3, end) infinite;
+        }
+
+        @keyframes dots {
+            0% { content: "."; }
+            33% { content: ".."; }
+            66% { content: "..."; }
+            100% { content: "."; }
+        }
+
+        .loading {
+            text-align: left;
+            margin: 10px 10px;
+            font-style: italic;
+            color: #555;
+        }
+ 
+        /* ---------- RESPONSIVE DESIGN ---------- */
+        @media (min-width: 1025px) {
+            .chatbox {
+                width: 70%;       
+                max-width: 1600px;
+                padding: 20px;
+            }
+
+            .header-title h1 {
+                font-size: 56px; 
+            }
+
+            .logo {
+                width: 80px;     
+            }
+
+            .messages {
+                height: 850px;    
+            }
+
+            .input-box input, .input-box button {
+                padding: 16px;    
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .chatbox {
+                width: 90%;
+            }
+            h1 {
+                font-size: 42px;
+            }
+            .logo {
+                width: 60px;
+            }
+            .messages {
+                height: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                flex-direction: column;
+                gap: 10px;
+            }
+            h1 {
+                font-size: 36px;
+            }
+            .logo {
+                width: 55px;
+            }
+            .messages {
+                height: 500px;
+            }
+            .input-box button, .input-box input {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+            .logo {
+                width: 45px;
+            }
+            .messages {
+                height: 400px;
+            }
+            .input-box {
+                flex-direction: column;
+            }
+            .input-box button, .input-box input {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</body>
+</html>

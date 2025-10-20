@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeteoChat - Welcome</title>
+</head>
+<body>
+<!-- Main container of the welcome page -->
+<div class="container"  role="main">
+  <!-- MeteoChat logo image -->
+  <img src="static/LogoMeteoChat.png" alt="MeteoChat logo featuring weather symbols, a robotic element, and the system name" class="logo" id="logo" role="img">
+  <!-- Main title of the application -->
+  <h1 class="title" id="title" role="heading" aria-level="1">MeteoChat</h1>
+  <!-- Welcome message (initially hidden for animation sequence) -->
+  <h2 class="welcome-message" id="welcome" role="heading" aria-level="2" aria-live="polite" aria-hidden="true">Welcome to MeteoChat! Are you an expert or a standard user?</h2>
+  <!-- User type selection section -->
+  <div class="choices" id="choices" role="region" aria-label="User type selection" aria-hidden="true">
+    <button onclick="window.location.href='/expert'" title="Click here if you are an expert" aria-label="Click here if you are an expert"> Expert</button>
+    <button onclick="window.location.href='/standard'" title="Click here if you are a standard user" aria-label="Click here if you are a standard user">Standard User</button>
+  </div>
+</div>
+
+<script>
+  // Get DOM elements
+  const logo = document.getElementById('logo');
+  const title = document.getElementById('title');
+  const welcome = document.getElementById('welcome');
+  const choices = document.getElementById('choices');
+
+  // Sequential animations with ARIA integration
+  // Each element fades in progressively with a delay
+  setTimeout(() => { 
+    logo.classList.add('show'); 
+  }, 500);
+  
+  setTimeout(() => { 
+    title.classList.add('show'); 
+  }, 1500);
+  
+  setTimeout(() => { 
+    welcome.classList.add('show'); 
+    welcome.setAttribute('aria-hidden', 'false'); 
+  }, 3000);
+  
+  setTimeout(() => { 
+    choices.classList.add('show'); 
+    choices.setAttribute('aria-hidden', 'false'); 
+  }, 4500);
+</script>
+<style>
+  /* ------------------------------
+    BASE STYLES
+    ------------------------------ */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #084434;
+    font-family: "Century Gothic";
+    font-weight: bold;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .container {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+  }
+  /* ------------------------------
+     ELEMENT ANIMATIONS
+     ------------------------------ */
+  .logo {
+    width: 40%;
+    height: auto;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 1s, transform 1s;
+  }
+
+  .logo.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .title {
+    font-size: 2.5em;
+    opacity: 0;
+    transition: opacity 1s, transform 0.3s, color 0.3s, text-shadow 0.3s;
+  }
+
+  .title.show {
+    opacity: 1;
+  }
+
+  .title:hover {
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .welcome-message {
+    font-size: 1.5em;
+    margin-top: 20px;
+    font-weight: normal;
+    opacity: 0;
+    transition: opacity 1s, transform 0.3s, color 0.3s, text-shadow 0.3s;
+  }
+
+  .welcome-message.show {
+    opacity: 1;
+  }
+
+  .welcome-message:hover {
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  }
+
+  .choices {
+    margin-top: 20px;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  .choices.show {
+    opacity: 1;
+  }
+  /* ------------------------------
+    BUTTON STYLING
+    ------------------------------ */
+  button {
+    font-family: "Century Gothic";
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    transition: transform 0.2s, background-color 0.3s, color 0.3s;
+  }
+
+  button:hover {
+    background-color: #228733;
+    color: #fff;
+    transform: scale(1.15);
+  }
+  /* ------------------------------
+    RESPONSIVE DESIGN
+    ------------------------------ */
+
+  /* Media query for tablet and small desktop */
+  @media (max-width: 1024px) {
+    .logo {
+      width: 50%;
+    }
+    .title {
+      font-size: 2em;
+    }
+    .welcome-message {
+      font-size: 1.2em;
+    }
+    button {
+      font-size: 0.9em;
+      padding: 8px 16px;
+    }
+  }
+
+  /* Media query for mobile devices*/
+  @media (max-width: 768px) {
+    .logo {
+      width: 60%;
+    }
+    .title {
+      font-size: 1.8em;
+    }
+    .welcome-message {
+      font-size: 1em;
+    }
+    button {
+      font-size: 0.85em;
+      padding: 6px 12px;
+    }
+  }
+
+  /* Media query for extra-wide desktop screens*/
+  @media (min-width: 1600px) {
+    .container {
+      max-width: 800px;
+    }
+    .logo {
+      width: 35%;
+    }
+    .title {
+      font-size: 3em;
+    }
+    .welcome-message {
+      font-size: 2em;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 14px 28px;
+    }
+  }
+</style>
+</body>
+</html>

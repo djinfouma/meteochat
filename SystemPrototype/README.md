@@ -13,7 +13,8 @@
 * `expert.html` contains the web interface of the chatbot, intended for use by meteorologists.
 * `fine-tune-model-azure_expert.py` contains the code for fine-tuning the model
 * `general-public_expert.jsonl` contains the set of questions and answers as input for fine-tuning
-* `graphics.py` script that allows you to generate graphs.
+* `graphics.py` script that allows you to generate graphs into the chatbot, intended for an audience of expert users.
+* `graphics_standard.py` script that allows you to generate graphs, intended for an audience of standard users. The script works but still requires further improvements.
 * `pre_index.html` home page that allows users to choose the type of chatbot based on their preferences.
 * `secrets_sample.json` sample file containing the credentials required to access external services.
 * `standard.html` contains the web interface of the chatbot, intended for use by standard users.

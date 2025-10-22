@@ -507,7 +507,7 @@ def download_standard_report():
         set_heading_font(question_set)
         doc.add_paragraph(entry["answer"])
         # Generate charts from extracted numeric data
-        generate_graphics(doc, chat_history)
+        generate_graphics(doc, [entry])
 
     doc.add_page_break()
    
@@ -529,3 +529,4 @@ def download_standard_report():
     file_path = "report_standard.docx"
     doc.save(file_path)
     return send_file(file_path, as_attachment=True)
+

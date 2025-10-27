@@ -3,11 +3,11 @@
 ## Overview
 
 **MeteoChat** is an AI-powered system designed to automatically generate environmental reports from meteorological data.
-It leverages Large Language Models (LLMs) optimized through Fine-tuning and Retrieval-Augmented Generation (RAG) to produce accurate, accessible, and human-readable environmental summaries. The project aims to assist both domain experts and non-technical users by transforming raw environmental datasets into meaningful insights and narrative reports.
+It leverages Large Language Models (LLMs) optimized through Fine-tuning and Retrieval-Augmented Generation (RAG) to produce accurate, accessible, and human-readable environmental documents. The project aims to assist both domain experts and non-technical users by transforming raw environmental datasets into meaningful insights and narrative reports.
 
 ## Architecture
 
-The system operates in two stages: in the first, an environmental expert defines questions and answers related to different metrics, such as temperature and precipitation, which are used to fine-tune a GPT-4o model specialized in environmental data. In the second stage, the optimized model is integrated into a chatbot that retrieves relevant data using the RAG technique and generates accurate, context-aware responses. Finally, it produces complete .docx reports with summaries, graphs (Plotly), and conclusions tailored to expert or general users.
+The system operates in two stages: in the first, an environmental expert defines questions and answers related to different metrics, such as temperature and precipitation, which are used to fine-tune a GPT-4o model specialized in environmental data. In the second stage, the optimized model is integrated into a chatbot that retrieves relevant data using the RAG technique and generates accurate and context-aware responses. Finally, it produces complete .docx reports with summaries, graphs (Plotly), and conclusions tailored to expert or general users.
 
 ## User's Guide
 

@@ -13,6 +13,7 @@ The system operates in two stages: in the first, an environmental expert defines
 
 To use **MeteoChat**, you first need to install **Python** (version **3.10** or **3.11** is recommended) and several additional libraries:  
 `Chroma`, `Docx`, `Flask`, `LangChain`, `OpenAI`, `Pandas`, `Plotly`, and `Scipy`.  
+
 These can be installed via the terminal using:
 
 ```bash
@@ -20,6 +21,7 @@ pip install library_name
 ```
 
 To ensure correct execution and to manage dependencies independently, MeteoChat is developed and executed within a **Python virtual environment**.  
+
 You can create and activate it using the following commands:
 
 ```bash
@@ -49,6 +51,7 @@ python statistics.py
 This script should also be customized based on the selected metric.
 
 To perform the **fine-tuning**, you need valid **OpenAI credentials** (to be stored in the `secrets.json` file) and a JSONL training file (for example, `general-public_expert.jsonl`).  
+
 After preparing these files, run:
 
 ```bash

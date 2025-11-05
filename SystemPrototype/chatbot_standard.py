@@ -120,7 +120,7 @@ retriever = store.as_retriever(
 )
 
 # ===========================
-# Optimized prompt (placeholder for later)
+# Prompt
 # ===========================
 # Here, the system will define an improved PromptTemplate
 # for the standard chatbot to ensure simplified, readable responses.
@@ -529,4 +529,5 @@ def download_standard_report():
     file_path = "report_standard.docx"
     doc.save(file_path)
     return send_file(file_path, as_attachment=True)
+
 
